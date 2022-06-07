@@ -26,8 +26,10 @@ function createInvoice(dataCallback, endCallback, studentName = "BOB") {
     
     doc.polygon([50, 340], [50, 400], [(doc.page.width - 50) / 2, 400], [(doc.page.width - 50) / 2, 340])
     .stroke();
+    doc.font('Times-Roman').fontSize(12).text("DATE", 70, 345);
     doc.polygon([(doc.page.width - 50) / 2, 340], [(doc.page.width - 50) / 2, 400], [doc.page.width - 50, 400], [doc.page.width - 50, 340])
     .stroke();
+    doc.font('Times-Roman').fontSize(12).text("SERVICE DESCRIPTION", doc.page.width / 2, 345);
     doc.polygon([50, 360], [50, 400], [doc.page.width - 50, 400], [doc.page.width - 50, 360])
     .stroke();
     doc.font('Times-Roman').fontSize(12).text(dateString, 420, 290);
