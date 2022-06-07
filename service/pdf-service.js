@@ -4,6 +4,7 @@ let date = new Date();
 const dateString = 'Date: ' + date.toLocaleString('default', { month: 'long' }) + ', ' + date.getDate() + ', ' + date.getFullYear();
 
 function buildPDF(dataCallback, endCallback) {
+    // Adding this to create additional functions if required in the future
     createInvoice(dataCallback, endCallback)
 
 }
