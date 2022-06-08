@@ -1,45 +1,46 @@
+const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 require('dotenv').config();
 
-"use strict";
-const nodemailer = require("nodemailer");
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, 
+    process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
 
-// async..await is not allowed in global scope, must use a wrapper
-async function main() {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
+console.log("CLIENT_ID: " + process.env.CLIENT_ID);
+console.log("CLIENT_SECRET: " + process.env.CLIENT_SECRET);
+console.log("CLIENT_REDIRECT_URI: " + process.env.REDIRECT_URI);
+console.log("REFRESH_TOKEN: " + process.env.REFRESH_TOKEN);
 
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
-  });
 
-  let mailOptions = {
-    from: process.env.OWNER_EMAIL, // sender address
-    to: process.env.OWNER_EMAIL, // list of receivers
-    subject: "Test Email", // Subject line
-    text: "Test Email Text", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  }
-  // send mail with defined transport object
-  let info = await transporter.sendMail(mailOptions, (error, info) => {
-      if(error) {
-          return console.log(error);
-      }
-      console.log("Message sent: %s", info.messageId);
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info))
-  });
+async function sendMail() {
+    try {
+        const accessToken = await oAuth2Client.getAccessToken()
+        const transport = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                type: 'OAuth2',
+                user: process.env.OWNER_EMAIL,
+                clientId: process.env.CLIENT_ID,
+                clientSecret: process.env.CLIENT_SECRET,
+                accessToken: accessToken
+            }
+        });
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        const mailOptions = {
+            from: process.env.OWNER_EMAIL,
+            to: 'envolonakis@gmail.com',
+            subject: "Test Email API Subject",
+            text: "Test Email API Text",
+            html: "<h1> Test Email API HTML </h1>"
+        }
 
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        const result = await transport.sendMail(mailOptions);
+        return result;
+    } catch(error) {
+        return error;
+    }
 }
 
-main().catch(console.error);
+    
+sendMail().then(result => console.log("Email is sent: ", result))
+.catch((error) => console.log(error.message));
