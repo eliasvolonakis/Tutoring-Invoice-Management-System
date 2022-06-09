@@ -2,19 +2,21 @@ const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 require('dotenv').config();
 
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, 
-    process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
-oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
-
 console.log("CLIENT_ID: " + process.env.CLIENT_ID);
 console.log("CLIENT_SECRET: " + process.env.CLIENT_SECRET);
 console.log("CLIENT_REDIRECT_URI: " + process.env.REDIRECT_URI);
 console.log("REFRESH_TOKEN: " + process.env.REFRESH_TOKEN);
 
+// const oAuth2 = google.auth.OAuth2;
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+console.log("oAuth2Client: " + oAuth2Client);
+
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
 
 async function sendMail() {
     try {
         const accessToken = await oAuth2Client.getAccessToken()
+        console.log("Access Toke: " + accessToken);
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -28,7 +30,7 @@ async function sendMail() {
 
         const mailOptions = {
             from: process.env.OWNER_EMAIL,
-            to: 'envolonakis@gmail.com',
+            to: process.env.RECIPIENT,
             subject: "Test Email API Subject",
             text: "Test Email API Text",
             html: "<h1> Test Email API HTML </h1>"
