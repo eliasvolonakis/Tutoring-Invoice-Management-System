@@ -26,11 +26,11 @@ async function sendMail() {
         });
     
         const mailOptions = {
-          from: 'envolonakis@gmail.com',
+          from: process.env.OWNER_EMAIL,
           to: 'envolonakis@gmail.com',
           subject: "Test Email API Subject",
           text: "Test Email API Text",
-          html: "<h1> Test Email API HTML </h1>",
+          html: "<h1> This is a test email </h1>",
           auth: {
             user: process.env.OWNER_EMAIL,
             accessToken: accessToken.token
@@ -38,8 +38,8 @@ async function sendMail() {
         }
     
         const result = await transport.sendMail(mailOptions);
-        return result;
-        console.log("Email sent successfully with messageID:" + result.messageId + " and response " + result.response); 
+        console.log("Email sent successfully with messageID:" + result.messageId + " and response " + result.response);
+        return result; 
       } catch (error) {
         console.log(error.stack);  
         return error;
