@@ -46,8 +46,9 @@ function listEvents() {
         const start = new Date(event.start.dateTime) || new Date(event.start.date);
         const end = new Date (event.end.dateTime) || new Date(event.end.date);
         try{
-          sessions += `${event.summary}: ${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')} \n`;
-          console.log(sessions);
+          //if (event.summary.includes("Tutoring")) &  (event.summary.includes(studentName)){
+            sessions += `${event.summary}: ${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')} \n`;
+          //}
         }
         catch(err) {
           console.log(err)
