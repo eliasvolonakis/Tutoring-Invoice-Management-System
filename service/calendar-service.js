@@ -1,7 +1,6 @@
 const { google } = require('googleapis');
 require('dotenv').config();
 const fs = require('fs');
-const sessionsPath = '/Users/elias_volonakis/Tutoring-Invoice-Management-System/sessions.txt';
 const SESSIONS_PATH = process.env.SESSIONS_PATH;
 const CREDENTIALS = JSON.parse(process.env.CALENDAR_CREDENTIALS);
 const CALENDAR_ID = process.env.CALENDAR_ID;
