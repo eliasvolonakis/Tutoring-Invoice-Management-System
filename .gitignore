@@ -2,3 +2,4 @@ node_modules
 package-lock.json
 .env
 students.json
+testing-credentials.json

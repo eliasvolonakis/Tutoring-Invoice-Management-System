@@ -1,6 +1,8 @@
 const { google } = require('googleapis');
 require('dotenv').config();
-
+const fs = require('fs');
+const sessionsPath = '/Users/elias_volonakis/Tutoring-Invoice-Management-System/sessions.txt';
+const SESSIONS_PATH = process.env.SESSIONS_PATH;
 const CREDENTIALS = JSON.parse(process.env.CALENDAR_CREDENTIALS);
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
@@ -19,8 +21,8 @@ const calendar = google.calendar({version : "v3", auth});
 
 // Replace later with specific times 
 const timeMin = new Date(2022, 6, 01);
-const timeMax = new Date(2022, 6, 30);
-
+const timeMax = new Date(2022, 8, 30);
+let sessions = "";
 
 function listEvents() {
   calendar.events.list({
@@ -35,13 +37,28 @@ function listEvents() {
     const events = res.data.items;
     if (events.length) {
       console.log(`Events between ${timeMin.toISOString()} - ${timeMax.toISOString()}`);
-      events.map((event, i) => {
+      // for (let event of events) {
+      //   const start = event.start.dateTime || event.start.date;
+      //   const end = event.end.dateTime || event.end.date;
+      //   outputMonthlySessions(`${event.summary}: ${start} - ${end} \n`);
+      // }
+      events.map(event => {
         const start = event.start.dateTime || event.start.date;
         const end = event.end.dateTime || event.end.date;
-        console.log(`${event.summary}: ${start} - ${end}`);
+        sessions += `${event.summary}: ${start} - ${end} \n`;
+        //outputMonthlySessions(`${event.summary}: ${start} - ${end} \n`);
       });
+      outputMonthlySessions(sessions);
     } else {
       console.log('No upcoming events found.');
+    }
+  });
+}
+
+function outputMonthlySessions(content) {
+  fs.writeFile(SESSIONS_PATH, content, err => {
+    if (err) {
+      console.error(err)
     }
   });
 }
