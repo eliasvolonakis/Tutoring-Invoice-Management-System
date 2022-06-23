@@ -75,7 +75,6 @@ function getSessionDifference(start, end) {
   let hoursDifference = end.getHours() - start.getHours();
   let minutesDifference = (end.getMinutes() - start.getMinutes()) / 60;
   let totalDifference = hoursDifference + minutesDifference;
-  console.log(totalDifference);
   return String(totalDifference);
 }
 

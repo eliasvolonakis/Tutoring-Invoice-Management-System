@@ -68,15 +68,5 @@ function getSessionData() {
     return {sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours};
 }
 
-function clearSessionsTxt() {
-    //Replae with env variable SESSIONS_PATH
-    fs.writeFile('.././sessions.txt', "", err => {
-          if (err) {
-            console.error(err)
-          }
-    });
-}
-
 getSessionData();
 createInvoice();
-clearSessionsTxt();
