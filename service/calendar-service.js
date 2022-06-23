@@ -2,7 +2,9 @@ const { google } = require('googleapis');
 require('dotenv').config();
 const fs = require('fs');
 const SESSIONS_PATH = process.env.SESSIONS_PATH;
-const CREDENTIALS = JSON.parse(process.env.CALENDAR_CREDENTIALS);
+const credstype = typeof(process.env.CALENDAR_CREDENTIALS);
+console.log(credstype)
+const CREDENTIALS = JSON.parse(String(process.env.CALENDAR_CREDENTIALS));
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
@@ -47,7 +49,7 @@ function listEvents() {
         const end = new Date (event.end.dateTime) || new Date(event.end.date);
         try{
           //if (event.summary.includes("Tutoring")) &  (event.summary.includes(studentName)){
-            sessions += `${event.summary}: ${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')} \n`;
+            sessions += `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')} \n`;
           //}
         }
         catch(err) {

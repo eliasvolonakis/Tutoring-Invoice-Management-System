@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+const SESSIONS_PATH = process.env.SESSIONS_PATH;
 const PDFDocument = require('pdfkit');
 let date = new Date();
 const dateString = 'Date: ' + date.toLocaleString('default', { month: 'long' }) + ', ' + date.getDate() + ', ' + date.getFullYear();
@@ -38,4 +40,10 @@ function createInvoice(dataCallback, endCallback, studentName = "BOB") {
     doc.end();
 }
 
-module.exports = { buildPDF };
+function getSessions() {
+    const content = fs.readFileSync('./../sessions.txt', 'utf8');
+    console.log(content);
+}
+
+getSessions();
+//module.exports = { buildPDF };
