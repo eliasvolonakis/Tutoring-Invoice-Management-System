@@ -41,8 +41,12 @@ function createInvoice(dataCallback, endCallback, studentName = "BOB") {
 }
 
 function getSessions() {
-    const content = fs.readFileSync('./../sessions.txt', 'utf8');
-    console.log(content);
+    const content = fs.readFileSync('.././sessions.txt', 'utf8');
+    const sessions = content.split('\n');
+    const number = content.split('\n').length - 1
+    console.log(sessions);
+    console.log(number - 1);
+    return {sessionsArray: content.split('\n'), SessionsNumber: content.split('\n').length - 1}
 }
 
 getSessions();
