@@ -1,11 +1,23 @@
 require('dotenv').config();
 const fs = require('fs');
+
 const SESSIONS_PATH = process.env.SESSIONS_PATH;
+const OWNER_NAME = process.env.OWNER_EMAIL;
+const OWNER_HOME_ADDRESS = process.env.OWNER_HOME_ADDRESS;
+const OWNER_HOME_CITY_PROVINCE_PC = process.env.OWNER_HOME_CITY_PROVINCE_PC;
+const OWNER_TELEPHONE = process.env.OWNER_TELEPHONE;
+
+console.log("Sessions Path: " + SESSIONS_PATH);
+console.log("Owner Name: " + OWNER_NAME);
+console.log("Owner Home Address: " + OWNER_HOME_ADDRESS);
+console.log("Owner Home City Province PC: " + OWNER_HOME_CITY_PROVINCE_PC);
+console.log("Owner Telephone: " + OWNER_TELEPHONE);
+
 const PDFDocument = require('pdfkit');
 let date = new Date();
 const dateString = 'Date: ' + date.toLocaleString('default', { month: 'long' }) + ', ' + date.getDate() + ', ' + date.getFullYear();
 
-function createInvoice(studentName = "BOB") {
+function createInvoice(studentName = "Bob") {
     sessionData = getSessionData();
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
@@ -56,5 +68,15 @@ function getSessionData() {
     return {sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours};
 }
 
+function clearSessionsTxt() {
+    //Replae with env variable SESSIONS_PATH
+    fs.writeFile('.././sessions.txt', "", err => {
+          if (err) {
+            console.error(err)
+          }
+    });
+}
+
 getSessionData();
 createInvoice();
+clearSessionsTxt();

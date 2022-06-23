@@ -15,3 +15,17 @@ router.get('/invoice', (req, res, next) => {
 });
 
 module.exports = router; 
+
+
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+
+var pdfDoc = new PDFDocument;
+pdfDoc.pipe(fs.createWriteStream('text_alignment.pdf'));
+
+pdfDoc.text("This text is left aligned", { align: 'left'})
+pdfDoc.text("This text is at the center", { align: 'center'})
+pdfDoc.text("This text is right aligned", { align: 'right'})
+pdfDoc.text("This text needs to be slightly longer so that we can see that justification actually works as intended", { align: 'justify'})
+
+pdfDoc.end();
