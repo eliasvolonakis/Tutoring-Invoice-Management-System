@@ -22,7 +22,7 @@ const calendar = google.calendar({version : "v3", auth});
 
 // Replace later with specific times 
 const timeMin = new Date(2022, 6, 01);
-const timeMax = new Date(2022, 8, 30);
+const timeMax = new Date(2022, 8, 1);
 
 // Replace above with this for first and last day of month
 // var date = new Date();
@@ -49,7 +49,7 @@ function listEvents() {
         const end = new Date (event.end.dateTime) || new Date(event.end.date);
         try{
           //if (event.summary.includes("Tutoring")) &  (event.summary.includes(studentName)){
-            sessions += `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')} \n`;
+          sessions += `${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')}!${getSessionDifference(start, end)}  \n`;
           //}
         }
         catch(err) {
@@ -69,6 +69,14 @@ function outputMonthlySessions(content) {
       console.error(err)
     }
   });
+}
+
+function getSessionDifference(start, end) {
+  let hoursDifference = end.getHours() - start.getHours();
+  let minutesDifference = (end.getMinutes() - start.getMinutes()) / 60;
+  let totalDifference = hoursDifference + minutesDifference;
+  console.log(totalDifference);
+  return String(totalDifference);
 }
 
 listEvents()

@@ -5,16 +5,10 @@ const PDFDocument = require('pdfkit');
 let date = new Date();
 const dateString = 'Date: ' + date.toLocaleString('default', { month: 'long' }) + ', ' + date.getDate() + ', ' + date.getFullYear();
 
-function buildPDF(dataCallback, endCallback) {
-    // Adding this to create additional functions if required in the future
-    createInvoice(dataCallback, endCallback)
-
-}
-
-function createInvoice(dataCallback, endCallback, studentName = "BOB") {
+function createInvoice(studentName = "BOB") {
+    sessionData = getSessionData();
     const doc = new PDFDocument();
-    doc.on('data', dataCallback);
-    doc.on('end', endCallback);
+    doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
     doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_NAME, 50, 50);
     doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_HOME_ADDRESS, 50, 62);
     doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_HOME_CITY_PROVINCE_PC, 50, 74);
@@ -40,14 +34,27 @@ function createInvoice(dataCallback, endCallback, studentName = "BOB") {
     doc.end();
 }
 
-function getSessions() {
+function getSessionData() {
+    //const content = fs.readFileSync(SESSIONS_PATH, 'utf8');
     const content = fs.readFileSync('.././sessions.txt', 'utf8');
     const sessions = content.split('\n');
-    const number = content.split('\n').length - 1
-    console.log(sessions);
-    console.log(number - 1);
-    return {sessionsArray: content.split('\n'), SessionsNumber: content.split('\n').length - 1}
+    let totalSessionsHours = 0;
+    let sessionDates = [];
+    sessions.forEach(session => {
+        try{
+            if(session != "") {
+                let sessionData = session.split('!');
+                sessionDates.push(sessionData[0]);
+                totalSessionsHours += parseFloat(sessionData[1]);
+            }
+        } catch(err) {
+            console.error(error);
+        }
+    });
+    // Add logging for debugging
+    console.log({sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours});
+    return {sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours};
 }
 
-getSessions();
-//module.exports = { buildPDF };
+getSessionData();
+createInvoice();

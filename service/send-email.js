@@ -49,6 +49,5 @@ async function sendMail() {
         return error;
       }
 }
-
     
 sendMail()
