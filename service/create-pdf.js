@@ -52,12 +52,21 @@ function getSessionData() {
     const sessions = content.split('\n');
     let totalSessionsHours = 0;
     let sessionDates = [];
+    let studentSessionData = {};
     sessions.forEach(session => {
         try{
             if(session != "") {
                 let sessionData = session.split('!');
-                sessionDates.push(sessionData[0]);
-                totalSessionsHours += parseFloat(sessionData[1]);
+                if(!(sessionData[0] in studentSessionData)) {
+                    studentSessionData[sessionData[0]] = {sessionDates : [sessionData[1]], 
+                        totalSessionsNumber : parseFloat(sessionData[2])}
+                } else 
+                {
+                    studentSessionData[sessionData[0]][sessionDates].push(sessionData[1]);
+                    studentSessionData[sessionData[0]][totalSessionsNumber] += parseFloat(sessionData[1]);
+                }
+                // sessionDates.push(sessionData[0]);
+                // totalSessionsHours += parseFloat(sessionData[1]);
             }
         } catch(err) {
             console.error(error);

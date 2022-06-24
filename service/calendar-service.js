@@ -2,7 +2,7 @@ const credentials = require('./../credentials');
 const { google } = require('googleapis');
 const fs = require('fs');
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
-const CREDENTIALS = JSON.parse(String(credentials["CALENDAR_CREDENTIALS"]));
+const CREDENTIALS = credentials["CALENDAR_CREDENTIALS"];
 const CALENDAR_ID = credentials["CALENDAR_ID"];
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
