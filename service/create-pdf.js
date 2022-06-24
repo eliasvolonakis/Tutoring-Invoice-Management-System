@@ -26,6 +26,7 @@ function createInvoice() {
         let firstName = key.split(" ")[0];
         let lastName = getLastNameByFirstName(firstName);
         let studentName = firstName + " " + lastName;
+        let numberOfSessions = value.sessionDates.length;
         const doc = new PDFDocument();
         doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
         doc.font('Times-Bold').fontSize(12).text(OWNER_NAME, 50, 50);
@@ -40,15 +41,23 @@ function createInvoice() {
         doc.font('Times-Roman').fontSize(12).text(dateString, 420, 290);
         doc.font('Times-Bold').fontSize(14).text("Student: " + studentName, 50, 315);
         
-        doc.polygon([50, 340], [50, 400], [(doc.page.width - 50) / 2, 400], [(doc.page.width - 50) / 2, 340])
+        doc.polygon([50, 340], [50, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 340])
         .stroke();
         doc.font('Times-Roman').fontSize(12).text("DATE", 70, 345);
-        doc.polygon([(doc.page.width - 50) / 2, 340], [(doc.page.width - 50) / 2, 400], [doc.page.width - 50, 400], [doc.page.width - 50, 340])
+        doc.polygon([(doc.page.width - 50) / 2, 340], [(doc.page.width - 50) / 2, 400 + 12 * numberOfSessions], [doc.page.width - 50, 400 + 12 * numberOfSessions], [doc.page.width - 50, 340])
         .stroke();
         doc.font('Times-Roman').fontSize(12).text("SERVICE DESCRIPTION", doc.page.width / 2, 345);
-        doc.polygon([50, 360], [50, 400], [doc.page.width - 50, 400], [doc.page.width - 50, 360])
+        doc.font('Times-Bold').fontSize(12).text("Providing Math Tutoring Services", doc.page.width / 2 + 10, 380);
+        doc.font('Times-Roman').fontSize(12).text(`${value.totalSessionsNumber} X $${getSessionFeeByFirstName(firstName)} per session = $${value.totalSessionsNumber * getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 + 10, 400);
+        doc.polygon([50, 360], [50, 400 + 12 * numberOfSessions], [doc.page.width - 50, 400 + 12 * numberOfSessions], [doc.page.width - 50, 360])
         .stroke();
-        doc.font('Times-Roman').fontSize(12).text(dateString, 420, 290);
+
+        i = 0
+        while(i < value.sessionDates.length - 1) {
+            doc.font('Times-Roman').fontSize(12).text(value.sessionDates[i], 60, 370 + i * 15);
+            i ++
+        }
+        doc.font('Times-Bold').fontSize(12).text(`TOTAL AMOUNT DUE: $${value.totalSessionsNumber * getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 - 80, 400 + 12 * (numberOfSessions + 2));
         doc.end();
     };
 }
@@ -91,6 +100,16 @@ function getLastNameByFirstName(firstName) {
         }
     });
     return lastName;
+}
+
+function getSessionFeeByFirstName(firstName) {
+    let sessionFee = 0;
+    students.forEach(student => {
+        if (student.firstName == firstName) {
+            sessionFee = student.sessionFee;
+        }
+    });
+    return sessionFee;
 }
 
 //getSessionData();
