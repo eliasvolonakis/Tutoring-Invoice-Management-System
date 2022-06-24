@@ -1,8 +1,9 @@
 const credentials = require('./../credentials');
+const students = require('./../data/example-students.json');
 const fs = require('fs');
 
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
-const OWNER_NAME = credentials["OWNER_EMAIL"];
+const OWNER_NAME = credentials["OWNER_NAME"];
 const OWNER_HOME_ADDRESS = credentials["OWNER_HOME_ADDRESS"];
 const OWNER_HOME_CITY_PROVINCE_PC = credentials["OWNER_HOME_CITY_PROVINCE_PC"];
 const OWNER_TELEPHONE = credentials["OWNER_TELEPHONE"];
@@ -22,7 +23,9 @@ const dateString = 'Date: ' + date.toLocaleString('default', { month: 'long' }) 
 function createInvoice() {
     sessionData = getSessionData();
     for (const [key, value] of Object.entries(sessionData)) {
-        studentName = key.split(" ")[0];
+        let firstName = key.split(" ")[0];
+        let lastName = getLastNameByFirstName(firstName);
+        let studentName = firstName + " " + lastName;
         const doc = new PDFDocument();
         doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
         doc.font('Times-Bold').fontSize(12).text(OWNER_NAME, 50, 50);
@@ -78,6 +81,16 @@ function getSessionData() {
     // Add logging for debugging
     console.log(studentSessionData)
     return studentSessionData;
+}
+
+function getLastNameByFirstName(firstName) {
+    let lastName = "";
+    students.forEach(student => {
+        if (student.firstName == firstName) {
+            lastName = student.lastName;
+        }
+    });
+    return lastName;
 }
 
 //getSessionData();
