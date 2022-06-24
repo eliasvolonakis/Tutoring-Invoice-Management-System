@@ -1,11 +1,11 @@
 require('dotenv').config();
 const fs = require('fs');
 
-const SESSIONS_PATH = credentials["SESSIONS_PATH"];
-const OWNER_NAME = credentials["OWNER_EMAIL"];
-const OWNER_HOME_ADDRESS = credentials["OWNER_HOME_ADDRESS"];
-const OWNER_HOME_CITY_PROVINCE_PC = credentials["OWNER_HOME_CITY_PROVINCE_PC"];
-const OWNER_TELEPHONE = credentials["OWNER_TELEPHONE"];
+const SESSIONS_PATH = process.env.SESSIONS_PATH;
+const OWNER_NAME = process.env.OWNER_EMAIL;
+const OWNER_HOME_ADDRESS = process.env.OWNER_HOME_ADDRESS;
+const OWNER_HOME_CITY_PROVINCE_PC = process.env.OWNER_HOME_CITY_PROVINCE_PC;
+const OWNER_TELEPHONE = process.env.OWNER_TELEPHONE;
 
 console.log("Sessions Path: " + SESSIONS_PATH);
 console.log("Owner Name: " + OWNER_NAME);
@@ -21,11 +21,11 @@ function createInvoice(studentName = "Bob") {
     sessionData = getSessionData();
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
-    doc.font('Times-Bold').fontSize(12).text(OWNER_NAME, 50, 50);
-    doc.font('Times-Bold').fontSize(12).text(OWNER_HOME_ADDRESS, 50, 62);
-    doc.font('Times-Bold').fontSize(12).text(OWNER_HOME_CITY_PROVINCE_PC, 50, 74);
-    doc.font('Times-Bold').fontSize(12).text('T: ' + OWNER_TELEPHONE, 50, 86);
-    doc.font('Times-Bold').fontSize(12).text('E: ' + OWNER_EMAIL, 50, 98);
+    doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_NAME, 50, 50);
+    doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_HOME_ADDRESS, 50, 62);
+    doc.font('Times-Bold').fontSize(12).text(process.env.OWNER_HOME_CITY_PROVINCE_PC, 50, 74);
+    doc.font('Times-Bold').fontSize(12).text('T: ' + process.env.OWNER_TELEPHONE, 50, 86);
+    doc.font('Times-Bold').fontSize(12).text('E: ' + process.env.OWNER_EMAIL, 50, 98);
     doc.fillOpacity(0.5)
     doc.font('Times-Roman').fontSize(27.5).text('INTERIM', 50, 250);
     doc.font('Times-Roman').fontSize(27.5).text('INVOICE', 50, 278);
@@ -47,8 +47,8 @@ function createInvoice(studentName = "Bob") {
 }
 
 function getSessionData() {
-    const content = fs.readFileSync(SESSIONS_PATH, 'utf8');
-    //const content = fs.readFileSync('.././sessions.txt', 'utf8');
+    //const content = fs.readFileSync(SESSIONS_PATH, 'utf8');
+    const content = fs.readFileSync('.././sessions.txt', 'utf8');
     const sessions = content.split('\n');
     let totalSessionsHours = 0;
     let sessionDates = [];

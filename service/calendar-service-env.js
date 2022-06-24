@@ -1,9 +1,11 @@
-const credentials = require('./../credentials');
+require('dotenv').config();
 const { google } = require('googleapis');
 const fs = require('fs');
-const SESSIONS_PATH = credentials["SESSIONS_PATH"];
-const CREDENTIALS = JSON.parse(String(credentials["CALENDAR_CREDENTIALS"]));
-const CALENDAR_ID = credentials["CALENDAR_ID"];
+const env = process.env;
+console.log(env);
+const SESSIONS_PATH = process.env.SESSIONS_PATH;
+const CREDENTIALS = JSON.parse(String(process.env.CALENDAR_CREDENTIALS));
+const CALENDAR_ID = process.env.CALENDAR_ID;
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
 'https://www.googleapis.com/auth/calendar.events', 

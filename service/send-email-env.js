@@ -1,4 +1,4 @@
-const credentials = require('./../credentials');
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 
@@ -6,14 +6,15 @@ let date = new Date();
 const current_date = date.toLocaleString('default', { month: 'long' });
 const subject = current_date + " Invoice";
 
-console.log("CLIENT_ID: " + credentials["CLIENT_ID"]);
-console.log("CLIENT_SECRET: " + credentials["CLIENT_SECRET"]);
-console.log("CLIENT_REDIRECT_URI: " + credentials["REDIRECT_URI"]);
-console.log("REFRESH_TOKEN: " + credentials["REFRESH_TOKEN"]);
+console.log("CLIENT_ID: " + process.env.CLIENT_ID);
+console.log("CLIENT_SECRET: " + process.env.CLIENT_SECRET);
+console.log("CLIENT_REDIRECT_URI: " + process.env.REDIRECT_URI);
+console.log("REFRESH_TOKEN: " + process.env.REFRESH_TOKEN);
 
-const oAuth2Client = new google.auth.OAuth2(credentials["CLIENT_ID"], credentials["CLIENT_SECRET"], credentials["REDIRECT_URI"]);
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+console.log("oAuth2Client: " + oAuth2Client);
 
-oAuth2Client.setCredentials({refresh_token: credentials["REFRESH_TOKEN"]})
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
 
 async function sendMail() {
     try {
@@ -29,13 +30,13 @@ async function sendMail() {
         });
         
         const mailOptions = {
-          from: credentials["OWNER_EMAIL"],
+          from: process.env.OWNER_EMAIL,
           to: 'envolonakis@gmail.com',
           subject: subject,
           text: "Good morning, \n \n Attached to this email is STUDENTS tutoring invoice for all " + current_date + " tutoring sessions. Whenever it's convenient for you, please complete the payment via e-transfer to this email address",
           //html: "<p>Good morning,</p> <p>Attached to this email is STUDENTS tutoring invoice for all " + current_date + " tutoring sessions. Whenever it's convenient for you, please complete the payment via e-transfer to this email address. </p>",
           auth: {
-            user: credentials["OWNER_EMAIL"],
+            user: process.env.OWNER_EMAIL,
             accessToken: accessToken.token
           }
         }
