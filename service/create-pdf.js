@@ -1,4 +1,4 @@
-require('dotenv').config();
+const credentials = require('./../credentials');
 const fs = require('fs');
 
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
@@ -46,12 +46,11 @@ function createInvoice(studentName = "Bob") {
     doc.end();
 }
 
+// Returns an object of the form:
+// {Student Name Session: {sessionDates: [], totalSessionsNumber}}
 function getSessionData() {
     const content = fs.readFileSync(SESSIONS_PATH, 'utf8');
-    //const content = fs.readFileSync('.././sessions.txt', 'utf8');
     const sessions = content.split('\n');
-    let totalSessionsHours = 0;
-    let sessionDates = [];
     let studentSessionData = {};
     sessions.forEach(session => {
         try{
@@ -62,8 +61,10 @@ function getSessionData() {
                         totalSessionsNumber : parseFloat(sessionData[2])}
                 } else 
                 {
-                    studentSessionData[sessionData[0]][sessionDates].push(sessionData[1]);
-                    studentSessionData[sessionData[0]][totalSessionsNumber] += parseFloat(sessionData[1]);
+                    let currentSessionDates = studentSessionData[sessionData[0]].sessionDates;
+                    currentSessionDates.push(sessionData[1]);
+                    let totalSessionNumberToAdd = parseFloat(sessionData[2]);
+                    studentSessionData[sessionData[0]].totalSessionsNumber += totalSessionNumberToAdd;
                 }
                 // sessionDates.push(sessionData[0]);
                 // totalSessionsHours += parseFloat(sessionData[1]);
@@ -74,8 +75,9 @@ function getSessionData() {
     });
     // Add logging for debugging
     // console.log({sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours});
-    return {sessionDates: sessionDates, totalSessionsNumber: totalSessionsHours};
+    console.log(studentSessionData)
+    return studentSessionData;
 }
 
-//getSessionData();
-createInvoice();
+getSessionData();
+//createInvoice();
