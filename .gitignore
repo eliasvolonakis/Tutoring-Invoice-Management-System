@@ -3,3 +3,6 @@ package-lock.json
 .env
 students.json
 testing-credentials.json
+credentials.js
+invoices
+.vscode
