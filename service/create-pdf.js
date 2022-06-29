@@ -1,5 +1,6 @@
 const credentials = require('./../credentials');
 const students = require('./../data/example-students.json');
+const utils = require('./../utils/utils.js');
 const fs = require('fs');
 
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
@@ -24,7 +25,7 @@ function createInvoice() {
     sessionData = getSessionData();
     for (const [key, value] of Object.entries(sessionData)) {
         let firstName = key.split(" ")[0];
-        let lastName = getLastNameByFirstName(firstName);
+        let lastName = utils.getLastNameByFirstName(firstName);
         let studentName = firstName + " " + lastName;
         let numberOfSessions = value.sessionDates.length;
         const doc = new PDFDocument();
@@ -48,7 +49,7 @@ function createInvoice() {
         .stroke();
         doc.font('Times-Roman').fontSize(12).text("SERVICE DESCRIPTION", doc.page.width / 2, 345);
         doc.font('Times-Bold').fontSize(12).text("Providing Math Tutoring Services", doc.page.width / 2 + 10, 380);
-        doc.font('Times-Roman').fontSize(12).text(`${value.totalSessionsNumber} X $${getSessionFeeByFirstName(firstName)} per session = $${value.totalSessionsNumber * getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 + 10, 400);
+        doc.font('Times-Roman').fontSize(12).text(`${value.totalSessionsNumber} X $${utils.getSessionFeeByFirstName(firstName)} per session = $${value.totalSessionsNumber * utils.getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 + 10, 400);
         doc.polygon([50, 360], [50, 400 + 12 * numberOfSessions], [doc.page.width - 50, 400 + 12 * numberOfSessions], [doc.page.width - 50, 360])
         .stroke();
 
@@ -57,7 +58,7 @@ function createInvoice() {
             doc.font('Times-Roman').fontSize(12).text(value.sessionDates[i], 60, 370 + i * 15);
             i ++
         }
-        doc.font('Times-Bold').fontSize(12).text(`TOTAL AMOUNT DUE: $${value.totalSessionsNumber * getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 - 80, 400 + 12 * (numberOfSessions + 2));
+        doc.font('Times-Bold').fontSize(12).text(`TOTAL AMOUNT DUE: $${value.totalSessionsNumber * utils.getSessionFeeByFirstName(firstName)}`, doc.page.width / 2 - 80, 400 + 12 * (numberOfSessions + 2));
         doc.end();
     };
 }
@@ -92,25 +93,25 @@ function getSessionData() {
     return studentSessionData;
 }
 
-function getLastNameByFirstName(firstName) {
-    let lastName = "";
-    students.forEach(student => {
-        if (student.firstName == firstName) {
-            lastName = student.lastName;
-        }
-    });
-    return lastName;
-}
+// function getLastNameByFirstName(firstName) {
+//     let lastName = "";
+//     students.forEach(student => {
+//         if (student.firstName == firstName) {
+//             lastName = student.lastName;
+//         }
+//     });
+//     return lastName;
+// }
 
-function getSessionFeeByFirstName(firstName) {
-    let sessionFee = 0;
-    students.forEach(student => {
-        if (student.firstName == firstName) {
-            sessionFee = student.sessionFee;
-        }
-    });
-    return sessionFee;
-}
+// function getSessionFeeByFirstName(firstName) {
+//     let sessionFee = 0;
+//     students.forEach(student => {
+//         if (student.firstName == firstName) {
+//             sessionFee = student.sessionFee;
+//         }
+//     });
+//     return sessionFee;
+// }
 
 //getSessionData();
 createInvoice();

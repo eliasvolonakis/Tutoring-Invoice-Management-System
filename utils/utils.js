@@ -1,5 +1,6 @@
 const credentials = require('./../credentials');
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
+const students = require('./../data/example-students.json');
 const fs = require('fs');
 
 let getLastNameByFirstName = function (firstName) {
@@ -9,6 +10,9 @@ let getLastNameByFirstName = function (firstName) {
             lastName = student.lastName;
         };
     });
+    if(lastName == "") {
+      console.error(`No Student with first name ${firstName}`);
+    }
     return lastName;
 };
 

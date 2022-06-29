@@ -17,20 +17,19 @@ const auth = new google.auth.JWT(
 
 const calendar = google.calendar({version : "v3", auth});
 
-// Replace later with specific times 
-const timeMin = new Date(2022, 7, 1);
-const timeMax = new Date(2022, 7, 14);
 
 // Replace above with this for first and last day of month
-// var date = new Date();
-// var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-// var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+var date = new Date();
+console.log("Date: " + date.toDateString());
+var timeMin = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+var timeMax = new Date(date.getFullYear(), date.getMonth() + 2, 0);
 
 let sessions = "";
 
 function listEvents() {
   calendar.events.list({
     calendarId: CALENDAR_ID,
+    // timeMin and timeMax are 1 month behind the set Dates
     timeMin: timeMin.toISOString(),
     timeMax: timeMax.toISOString(),
     singleEvents: true,
@@ -39,6 +38,8 @@ function listEvents() {
     if (err) return console.log('The API returned an error: ' + err);
     const events = res.data.items;
     if (events.length) {
+      console.log("timeMin: " + timeMin.toDateString());
+      console.log("timeMax: " + timeMax.toDateString());
       console.log(`Events between ${timeMin.getMonth()}/${timeMin.getDate()}/${timeMin.getFullYear()} - ${timeMax.getMonth()}/${timeMax.getDate()}/${timeMax.getFullYear()}`);
       events.map(event => {
         const start = new Date(event.start.dateTime) || new Date(event.start.date);
@@ -46,7 +47,6 @@ function listEvents() {
         try{
             // Assume that all Tutoring sessions contains the string "Tutoring" in event name
             if (event.summary.includes("Tutoring")) {
-              console.log(utils);
               sessions += getSessionString(event, start, end);
             }
         }
