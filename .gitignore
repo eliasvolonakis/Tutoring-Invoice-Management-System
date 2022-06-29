@@ -6,3 +6,5 @@ testing-credentials.json
 credentials.js
 invoices
 .vscode
+sessions.txt
+example-students.json
