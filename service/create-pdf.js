@@ -115,3 +115,5 @@ function getSessionData() {
 
 //getSessionData();
 createInvoice();
+
+module.exports = {createInvoice}

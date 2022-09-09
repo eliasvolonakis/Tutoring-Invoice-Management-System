@@ -62,7 +62,26 @@ function listEvents() {
 }
 
 function getSessionString(event, start, end) {
-  return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')}!${utils.getSessionDifference(start, end)}\n`;
+  let startAmPm = " am";
+  let endAmPm = " am";
+  if (start.getHours() > 12) {
+    let startHour = start.getHours() - 12;
+    startAmPm = " pm";
+  }
+  if (start.getHours() == 12) {
+    startAmPm = " pm";
+  }
+  if (end.getHours() > 12) {
+    let endHour = start.getHours() - 12;
+    endtAmPm = " pm";
+  }
+  if (start.getHours() == 12) {
+    endAmPm = " pm";
+  }
+  return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${startHour}:${String(start.getMinutes()).padStart(2, '0')} ${ startAmPm} - ${endHour}:${String(end.getMinutes()).padStart(2, '0')} ${ endAmPm}!${utils.getSessionDifference(start, end)}\n`;
+  //return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')}!${utils.getSessionDifference(start, end)}\n`;
 }
 
 listEvents()
+
+module.exports = {listEvents}
