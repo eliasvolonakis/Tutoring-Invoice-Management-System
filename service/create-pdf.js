@@ -39,7 +39,7 @@ function createInvoice() {
         doc.font('Times-Roman').fontSize(27.5).text('INTERIM', 50, 250);
         doc.font('Times-Roman').fontSize(27.5).text('INVOICE', 50, 278);
         doc.fillOpacity(1)
-        doc.font('Times-Roman').fontSize(12).text(dateString, 420, 290);
+        doc.font('Times-Roman').fontSize(12).text(dateString, 420, 250);
         doc.font('Times-Bold').fontSize(14).text("Student: " + studentName, 50, 315);
         
         doc.polygon([50, 340], [50, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 340])
@@ -54,7 +54,8 @@ function createInvoice() {
         .stroke();
 
         i = 0
-        while(i < value.sessionDates.length - 1) {
+        while(i < value.sessionDates.length) {
+            console.log("Added" + firstName + " session: " + value.sessionDates[i]);
             doc.font('Times-Roman').fontSize(12).text(value.sessionDates[i], 60, 370 + i * 15);
             i ++
         }

@@ -18,18 +18,20 @@ const auth = new google.auth.JWT(
 const calendar = google.calendar({version : "v3", auth});
 
 
-// Replace above with this for first and last day of month
+// This is grabbing all the events from the current month
+// If the inovice should include all events from the previous month, then change to
+// var timeMin = new Date(date.getFullYear(), date.getMonth(), 1);
+// var timeMax = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 var date = new Date();
-console.log("Date: " + date.toDateString());
-var timeMin = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-var timeMax = new Date(date.getFullYear(), date.getMonth() + 2, 0);
+console.log("Today: " + date.toDateString());
+var timeMin = new Date(date.getFullYear(), date.getMonth(), 1);
+var timeMax = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
 let sessions = "";
 
 function listEvents() {
   calendar.events.list({
     calendarId: CALENDAR_ID,
-    // timeMin and timeMax are 1 month behind the set Dates
     timeMin: timeMin.toISOString(),
     timeMax: timeMax.toISOString(),
     singleEvents: true,
