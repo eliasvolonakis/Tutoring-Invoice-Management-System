@@ -1,5 +1,4 @@
 const credentials = require('./../credentials');
-const students = require('./../data/example-students.json');
 const utils = require('./../utils/utils.js');
 const fs = require('fs');
 
@@ -29,18 +28,18 @@ function createInvoice() {
         let studentName = firstName + " " + lastName;
         let numberOfSessions = value.sessionDates.length;
         const doc = new PDFDocument();
-        doc.pipe(fs.createWriteStream('./../invoices/' + studentName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
+        doc.pipe(fs.createWriteStream('./../invoices/' + firstName + " " + date.toLocaleString('default', { month: 'long' }) + " Invoice"));
         doc.font('Times-Bold').fontSize(12).text(OWNER_NAME, 50, 50);
         doc.font('Times-Bold').fontSize(12).text(OWNER_HOME_ADDRESS, 50, 62);
         doc.font('Times-Bold').fontSize(12).text(OWNER_HOME_CITY_PROVINCE_PC, 50, 74);
         doc.font('Times-Bold').fontSize(12).text('T: ' + OWNER_TELEPHONE, 50, 86);
         doc.font('Times-Bold').fontSize(12).text('E: ' + OWNER_EMAIL, 50, 98);
         doc.fillOpacity(0.5)
-        doc.font('Times-Roman').fontSize(27.5).text('INTERIM', 50, 250);
-        doc.font('Times-Roman').fontSize(27.5).text('INVOICE', 50, 278);
+        doc.font('Times-Roman').fontSize(27.5).text('INTERIM', 50, 180);
+        doc.font('Times-Roman').fontSize(27.5).text('INVOICE', 50, 208);
         doc.fillOpacity(1)
-        doc.font('Times-Roman').fontSize(12).text(dateString, 420, 250);
-        doc.font('Times-Bold').fontSize(14).text("Student: " + studentName, 50, 315);
+        doc.font('Times-Bold').fontSize(14).text(dateString, 50, 250);
+        doc.font('Times-Bold').fontSize(14).text("Student: " + studentName, 50, 275);
         
         doc.polygon([50, 340], [50, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 400 + 12 * numberOfSessions], [(doc.page.width - 50) / 2, 340])
         .stroke();
@@ -55,7 +54,8 @@ function createInvoice() {
 
         i = 0
         while(i < value.sessionDates.length) {
-            console.log("Added" + firstName + " session: " + value.sessionDates[i]);
+            // Added logging for debugging purposes
+            console.log("Added " + firstName + " session: " + value.sessionDates[i]);
             doc.font('Times-Roman').fontSize(12).text(value.sessionDates[i], 60, 370 + i * 15);
             i ++
         }
@@ -89,32 +89,11 @@ function getSessionData() {
             console.error(error);
         }
     });
-    // Add logging for debugging
+    // Add logging for debugging purposes
     console.log(studentSessionData)
     return studentSessionData;
 }
 
-// function getLastNameByFirstName(firstName) {
-//     let lastName = "";
-//     students.forEach(student => {
-//         if (student.firstName == firstName) {
-//             lastName = student.lastName;
-//         }
-//     });
-//     return lastName;
-// }
-
-// function getSessionFeeByFirstName(firstName) {
-//     let sessionFee = 0;
-//     students.forEach(student => {
-//         if (student.firstName == firstName) {
-//             sessionFee = student.sessionFee;
-//         }
-//     });
-//     return sessionFee;
-// }
-
-//getSessionData();
 createInvoice();
 
 module.exports = {createInvoice}
