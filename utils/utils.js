@@ -1,6 +1,6 @@
 const credentials = require('./../credentials');
 const SESSIONS_PATH = credentials["SESSIONS_PATH"];
-const students = require('./../data/example-students.json');
+const students = require('./../data/students.json');
 const fs = require('fs');
 
 let getLastNameByFirstName = function (firstName) {
