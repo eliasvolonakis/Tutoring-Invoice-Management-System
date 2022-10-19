@@ -1,6 +1,6 @@
 [
-{"firstName":"Bob", "lastName":"Mason", "studentEmail":"envolonakis@gmail.com", "parentEmail":["envolonakis@gmail.com"], "sessionFee": 40},
-{"firstName":"James", "lastName":"Greer", "studentEmail":"envolonakis@gmail.com", "parentEmail":["envolonakis@gmail.com"], "sessionFee": 50}, 
-{"firstName":"Joe", "lastName":"Jameson", "studentEmail":"envolonakis@gmail.com", "parentEmail":["envolonakis@gmail.com"], "sessionFee": 45}, 
-{"firstName":"Sarah", "lastName":"Papodopoulos", "studentEmail":"", "parentEmail":["envolonakis@gmail.com"], "sessionFee": 40}
+{"firstName":"Bob", "lastName":"Mason", "studentEmail":"envolonakis@gmail.com", "fee": 40, "onlineFee": 40, "inPersonFee": 40},
+{"firstName":"James", "lastName":"Greer", "studentEmail":"envolonakis@gmail.com", "fee": 40, "onlineFee": 40, "inPersonFee": 40},
+{"firstName":"Joe", "lastName":"Jameson", "studentEmail":"envolonakis@gmail.com", "fee": 40, "onlineFee": 40, "inPersonFee": 40},
+{"firstName":"Sarah", "lastName":"Papodopoulos", "studentEmail":"", "fee": 40, "onlineFee": 40, "inPersonFee": 40}
 ]
