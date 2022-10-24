@@ -45,4 +45,25 @@ let getSessionString = function (event, start, end) {
     return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')}!${utils.getSessionDifference(start, end)}\n`;
 }
 
-module.exports = {getLastNameByFirstName, getSessionFeeByFirstName, outputMonthlySessions, getSessionDifference, getSessionString}
+let getSessionStringNew = function (event, start, end) {
+  let startAmPm = " am";
+  let endAmPm = " am";
+  let startHour = start.getHours();
+  let endHour = end.getHours();
+  if (start.getHours() >= 12) {
+    startAmPm = " pm";
+  }
+  if (end.getHours() >= 12) {
+    endAmPm = " pm";
+  }
+  if (start.getHours() > 12) {
+    startHour = start.getHours() - 12;
+  }
+  if (end.getHours() > 12) {
+    endHour = end.getHours() - 12;
+  }
+  return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${startHour}:${String(start.getMinutes()).padStart(2, '0')} ${startAmPm} - ${endHour}:${String(end.getMinutes()).padStart(2, '0')} ${endAmPm}!${utils.getSessionDifference(start, end)}\n`;
+  
+}
+
+module.exports = {getSessionStringNew, getLastNameByFirstName, getSessionFeeByFirstName, outputMonthlySessions, getSessionDifference, getSessionString}
