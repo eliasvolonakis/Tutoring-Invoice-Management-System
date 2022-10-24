@@ -3,6 +3,7 @@
 // Create a Reminder Email Body and Send Reminder Email
 
 const credentials = require('./../credentials');
+const emailService = require('./email-service')
 const { google } = require('googleapis');
 const CREDENTIALS = credentials["CALENDAR_CREDENTIALS"];
 const CALENDAR_ID = credentials["CALENDAR_ID"];
@@ -56,5 +57,28 @@ function getDailySessions() {
       }
     });
   }
-  
-  // Create Logic for Creating and Emailing the Reminders
+
+  // Create logic for creating email body
+  // TODO: Replace with name and zoom link with env variables 
+  function createEmail(firstName, startTime, endTime) {
+      email = { "subject": `Tutoring Session Reminder ${startTime} - ${endTime}}}`,
+                 "body" : `Hey ${firstName}!\n\nI'll see you today for our tutoring session at ${startTime} - ${endTime}!\n
+                        Please use the zoom link below: \nhttps://us02web.zoom.us/j/5900858221 \n\n Thanks,\nElias`
+            }
+    console.log(`Subject: ${email.subject}`);
+    console.log(`Body: ${email.body}`);
+
+  }
+for (session of sessions) {
+    console.log(session)
+}
+
+// Call sendMail
+for await (session of sessions) {
+    console.log(session)
+    firstName = session.split(" ")[0];
+    startTimeIndex = session.indexOf(":");
+    timeDifference = session.slice(startTimeIndex); 
+    email = createEmail()
+    emailService.sendEmail(email["subject"], email["body"], utils.getEmailByFirstName(firstName))
+}

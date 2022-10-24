@@ -46,5 +46,3 @@ async function sendMail(subject, body, recipient) {
         return error;
       }
 }
-    
-sendMail()
