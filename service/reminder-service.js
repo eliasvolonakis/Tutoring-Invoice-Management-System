@@ -69,12 +69,16 @@ function getDailySessions() {
     console.log(`Body: ${email.body}`);
 
   }
-for (session of sessions) {
+
+
+getDailySessions()
+
+for (session of today_sessions) {
     console.log(session)
 }
 
 // Call sendMail
-for await (session of sessions) {
+for await (session of today_sessions) {
     console.log(session)
     firstName = session.split(" ")[0];
     startTimeIndex = session.indexOf(":");
