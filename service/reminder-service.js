@@ -10,7 +10,7 @@ const CALENDAR_ID = credentials["CALENDAR_ID"];
 const ZOOM_LINK = credentials["ZOOM_LINK"];
 const OWNER_EMAIL = credentials["OWNER_EMAIL"];
 const emailService = require('./email-service');
-const res = require('express/lib/response');
+
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
 'https://www.googleapis.com/auth/calendar.events', 
@@ -68,7 +68,7 @@ function createEmail(firstName, timeDifference) {
   email = { "subject": `Tutoring Session Reminder ${timeDifference}}}`,
             "body" : `${greeting} ${firstName}!\n\nI'll see you today for our tutoring session at ${timeDifference}!\n
                       Please use the zoom link below: \n${ZOOM_LINK} \n\nThanks,\nElias`
-            }
+          }
   console.log(`Subject: ${email.subject}`);
   console.log(`Body: ${email.body}`);
   return email
@@ -131,8 +131,3 @@ function todaySessions () {
   console.log("Today's Sessions: " + today_sessions);
   createAndSendReminders();
 }
-
-// getDailySessionsWithTimeout()
-// console.log("Today's Sessions: " + today_sessions);
-//console.log(today_sessions);
-//createAndSendReminders();
