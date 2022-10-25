@@ -63,13 +63,25 @@ function getDailySessions() {
 
   // Create logic for creating email body
   // TODO: Replace with name and zoom link with env variables 
-function createEmail(firstName, startTime, endTime) {
-  email = { "subject": `Tutoring Session Reminder ${startTime} - ${endTime}}}`,
-            "body" : `Hey ${firstName}!\n\nI'll see you today for our tutoring session at ${startTime} - ${endTime}!\n
+function createEmail(firstName, timeDifference) {
+  let greeting = getGreeting();
+  email = { "subject": `Tutoring Session Reminder ${timeDifference}}}`,
+            "body" : `${greeting} ${firstName}!\n\nI'll see you today for our tutoring session at ${timeDifference}!\n
                       Please use the zoom link below: \n${ZOOM_LINK} \n\nThanks,\nElias`
             }
     console.log(`Subject: ${email.subject}`);
     console.log(`Body: ${email.body}`);
+}
+
+function getGreeting() {
+  let greeting = "Good evening";
+  let today = new Date();
+  if (today.getHours() < 12) {
+    greeting = "Good morning";
+  } else if (today.getHours() < 18 && today.getHours() > 12) {
+    greeting = "Good afternoon";
+  }
+  return greeting;
 }
 
 function getEmailData(event, start, end) {
@@ -102,36 +114,9 @@ function getEmailData(event, start, end) {
 function createAndSendReminders(email) 
 {
   for (session of today_sessions) {
-      console.log(session)
-      firstName = session.split(" ")[0];
-      console.log("First Name: " + firstName)
-      startTimeIndex = session.indexOf(":");
-      timeDifference = session.slice(startTimeIndex); 
-      console.log("Time Difference: " + timeDifference)
       email = createEmail()
-      emailService.sendEmail(email["subject"], email["body"], utils.getEmailByFirstName(firstName))
+      await emailService.sendEmail(email["subject"], email["body"], utils.getEmailByFirstName(firstName))
   }
 }
-
-function getSessionStringNew(event, start, end) {
-  let startAmPm = " am";
-  let endAmPm = " am";
-  let startHour = start.getHours();
-  let endHour = end.getHours();
-  if (start.getHours() >= 12) {
-    startAmPm = " pm";
-  }
-  if (end.getHours() >= 12) {
-    endAmPm = " pm";
-  }
-  if (start.getHours() > 12) {
-    startHour = start.getHours() - 12;
-  }
-  if (end.getHours() > 12) {
-    endHour = end.getHours() - 12;
-  }
-  return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${startHour}:${String(start.getMinutes()).padStart(2, '0')} ${startAmPm} - ${endHour}:${String(end.getMinutes()).padStart(2, '0')} ${endAmPm}!${utils.getSessionDifference(start, end)}\n`;
-}
-
 
 getDailySessions();
