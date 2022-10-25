@@ -46,3 +46,5 @@ async function sendMail(subject, body, recipient) {
         return error;
       }
 }
+
+module.exports = {sendMail}
