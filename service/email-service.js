@@ -47,4 +47,6 @@ async function sendEmail(subject, body, recipient) {
       }
 }
 
+sendEmail('Test Subject', 'Test Body', 'envolonakis@gmail.com');
+
 module.exports = {sendEmail}
