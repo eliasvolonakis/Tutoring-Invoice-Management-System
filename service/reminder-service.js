@@ -8,6 +8,7 @@ const { google } = require('googleapis');
 const CREDENTIALS = credentials["CALENDAR_CREDENTIALS"];
 const CALENDAR_ID = credentials["CALENDAR_ID"];
 const ZOOM_LINK = credentials["ZOOM_LINK"];
+const OWNER_EMAIL = credentials["OWNER_EMAIL"];
 const emailService = require('./email-service')
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
@@ -111,12 +112,14 @@ function getEmailData(event, start, end) {
 }
 
 // Call sendMail
-function createAndSendReminders(email) 
+async function createAndSendReminders() 
 {
-  for (session of today_sessions) {
-      email = createEmail()
-      await emailService.sendEmail(email["subject"], email["body"], utils.getEmailByFirstName(firstName))
-  }
+  today_sessions.forEach(session => {
+    email = createEmail(session.firstName, session.timeDifference)
+    //await emailService.sendEmail(email["subject"], email["body"], utils.getEmailByFirstName(firstName))
+    await emailService.sendEmail(email["subject"], email["body"], OWNER_EMAIL)
+  });
 }
 
 getDailySessions();
+await createAndSendReminders()
