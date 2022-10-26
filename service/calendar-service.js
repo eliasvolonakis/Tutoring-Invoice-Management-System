@@ -3,6 +3,8 @@ const utils = require('./../utils/utils.js');
 const { google } = require('googleapis');
 const CREDENTIALS = credentials["CALENDAR_CREDENTIALS"];
 const CALENDAR_ID = credentials["CALENDAR_ID"];
+const SESSIONS_PATH = credentials["SESSIONS_PATH"];
+const fs = require('fs');
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar', 
 'https://www.googleapis.com/auth/calendar.events', 
@@ -56,7 +58,7 @@ function listEvents() {
           console.log(err)
         }
       });
-      utils.outputMonthlySessions(sessions);
+      outputMonthlySessions(sessions);
     } else {
       console.log('No upcoming events found.');
     }
@@ -81,8 +83,15 @@ function getSessionString(event, start, end) {
     endHour = end.getHours() - 12;
   }
   return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${startHour}:${String(start.getMinutes()).padStart(2, '0')} ${startAmPm} - ${endHour}:${String(end.getMinutes()).padStart(2, '0')} ${endAmPm}!${utils.getSessionDifference(start, end)}\n`;
-  //return `${event.summary}!${start.toLocaleString('default', { month: 'long' })} ${start.getDate()}, ${start.getFullYear()}: ${start.getHours()}:${String(start.getMinutes()).padStart(2, '0')} - ${end.getHours()}:${String(end.getMinutes()).padStart(2, '0')}!${utils.getSessionDifference(start, end)}\n`;
-}
+};
+
+function outputMonthlySessions(content) {
+  fs.writeFile(SESSIONS_PATH, content, err => {
+    if (err) {
+      console.error(err)
+    }
+  });
+};
 
 listEvents()
 
