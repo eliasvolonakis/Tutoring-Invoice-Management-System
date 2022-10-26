@@ -8,3 +8,4 @@ invoices
 .vscode
 sessions.txt
 example-students.json
+../.DS_Store
